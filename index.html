@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifiche Browser</title>
+</head>
+<body>
+    <h1>Notifiche Browser</h1>
+    <button id="richiediPermesso">Richiedi Permesso</button>
+    <button id="inviaNotifica">Invia Notifica</button>
+
+    <script>
+        document.getElementById('richiediPermesso').addEventListener('click', function() {
+            if ('Notification' in window) {
+                if (Notification.permission === 'default') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            console.log('Permesso per le notifiche concesso');
+                        } else {
+                            console.log('Permesso per le notifiche negato');
+                        }
+                    });
+                }
+            }
+        });
+
+        document.getElementById('inviaNotifica').addEventListener('click', function() {
+            mostraNotifica('Ciao!', {
+                body: 'Questa è una notifica dal tuo sito web.',
+                icon: 'https://www.example.com/icon.png'
+            });
+        });
+
+        function mostraNotifica(titolo, opzioni) {
+            if (Notification.permission === 'granted') {
+                new Notification(titolo, opzioni);
+            }
+        }
+
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'hidden') {
+                mostraNotifica('Ehi!', {
+                    body: 'Torna a visitare il nostro sito!',
+                    icon: 'https://www.example.com/icon.png'
+                });
+            }
+        });
+    </script>
+</body>
+</html>
